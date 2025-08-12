@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: your-secure-password
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: your-secure-password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: always
+  app:
+    container_name: java-web-app
+    image: avesahmed/new-java-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: "jdbc:mysql://mysql:3306/mydatabase?useSSL=false&allowPublicKeyRetrieval=true"
+      DB_USERNAME: myuser
+      DB_PASSWORD: your-secure-password
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
